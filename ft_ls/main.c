@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fteuber <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2014/09/29 14:06:13 by fteuber           #+#    #+#             */
+/*   Updated: 2014/09/29 18:19:11 by fteuber          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 //tous les printf oublie pas de mettre ft_putstr
 //ps: un amie qui tu veux du bien ;)
@@ -33,7 +45,7 @@ void		get_parameters_type(char *str, int parameters[5])
 	}
 }
 
-void		set_parameters(int argc, char **argv, t_parameters *params)
+void		ft_set_parameters(int argc, char **argv, t_parameters *params)
 {
 	int		i;
 
@@ -43,12 +55,12 @@ void		set_parameters(int argc, char **argv, t_parameters *params)
 		if (argv[i][0] == '-' && i == 1)
 			get_parameters_type(argv[i], params->parameters);
 		else
-			params->paths = add_link(params->paths, argv[i]);
+			ft_check_path(params, argv[i]);
 		i++;
 	}
 }
 
-void		check_parameters(int argc, char **argv, t_parameters *params)
+void		ft_init(t_parameters *params, char **envp)
 {
 	int		i;
 
@@ -58,21 +70,23 @@ void		check_parameters(int argc, char **argv, t_parameters *params)
 		params->parameters[i] = 0;
 		i++;
 	}
-	if (argc > 1)
-	{
-		set_parameters(argc, argv, params);
-	}
+	params->paths = NULL;
+	ft_get_pwd(params, envp);
 }
 
 int			main(int argc, char **argv, char **envp)
 {
 	t_parameters	params;
 
-	(void)envp;
-	check_parameters(argc, argv, &params);
+	ft_init(&params, envp);
+	if (argc > 1)
+		ft_set_parameters(argc, argv, &params);
+	printf("%d, %d, %d, %d, %d\n", params.parameters[0],
+			params.parameters[1], params.parameters[2], params.parameters[3],
+			params.parameters[4]);
 	while (params.paths)
 	{
-		printf("PATH=%s\n", params.paths->path);
+		printf("PATH= %s\n",params.paths->path);
 		params.paths = params.paths->next;
 	}
 	return (0);

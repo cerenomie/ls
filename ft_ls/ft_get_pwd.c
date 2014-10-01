@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lists.c                                         :+:      :+:    :+:   */
+/*   ft_get_pwd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fteuber <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/09/29 14:06:20 by fteuber           #+#    #+#             */
-/*   Updated: 2014/09/29 14:06:22 by fteuber          ###   ########.fr       */
+/*   Created: 2014/09/29 14:19:50 by fteuber           #+#    #+#             */
+/*   Updated: 2014/09/30 11:21:23 by fteuber          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-t_list			*add_link(t_list *list, char *data)
+void		ft_get_pwd(t_parameters *params, char **envp)
 {
-	t_list		*new_link;
-	new_link = (t_list *)malloc(sizeof(t_list));
-	if (new_link)
+	int		i;
+
+	(void)params;
+	i = 0;
+	while (envp[i])
 	{
-		new_link->path = data;
-		new_link->next = list;
+		if (envp[i][0] == 'P' && envp[i][1] == 'W' && envp[i][2] == 'D' &&
+				envp[i][3] == '=')
+		{
+			params->pwd = &envp[i][4];
+			break;
+		}
+		i++;
 	}
-	return (new_link);
+	printf("%s\n", params->pwd);
 }
